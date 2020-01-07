@@ -20,6 +20,7 @@ class ViewController: UIViewController {
     var a = 0
     var b : [Int] = []
     var c = 0
+    var d = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,6 +48,12 @@ class ViewController: UIViewController {
     @IBAction func remove(_ sender: UIButton) {
         if !b.contains(a) && b.count != 4{
             b.append(a)
+            repeat{
+                a = (a + 1) % 5
+            }while(b.contains(a))
+            
+            imagev.image = UIImage(named : imageName[a])
+            textView.text = imageDesc[a]
         }
     }
     
@@ -63,6 +70,54 @@ class ViewController: UIViewController {
             c = b.firstIndex(of: Int(step.value))!
             b.remove(at: c)
         }
+    }
+    
+    @IBOutlet weak var duration: UITextField!
+    
+    var time = Timer()
+    var animating = false
+    
+    @IBOutlet weak var anima: UIButton!
+    
+    @IBAction func ani(_ sender: UIButton) {
+        if !animating{
+            anima.setTitle("Stop", for: UIControl.State.normal)
+            
+            /*var images : [UIImage] = []
+            for imageN in imageName{
+                images.append(UIImage(named: imageN)!)
+            }*/
+            
+            var t : Double = 10
+            if duration.text != ""{
+                t = Double(duration.text!)!
+            }
+            
+            time = Timer.scheduledTimer(timeInterval: TimeInterval(t), target: self, selector: #selector(Action), userInfo: nil, repeats: true)
+            
+            animating = true
+            
+            /*imagev.animationDuration = TimeInterval(a)
+            imagev.animationImages = images
+            imagev.startAnimating()*/
+            
+        }else{
+            anima.setTitle("Animate", for: UIControl.State.normal)
+            time.invalidate()
+            animating = false
+            
+            /*imagev.stopAnimating()
+            d = 0
+            textView.text = imageDesc[d]*/
+        }
+    }
+    
+    @objc func Action(){
+        repeat{
+            a = (a + 1) % 5
+        }while(b.contains(a))
+        imagev.image = UIImage(named : imageName[a])
+        textView.text = imageDesc[a]
     }
     
 }
